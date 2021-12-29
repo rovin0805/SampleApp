@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {shallowEqual, useSelector} from 'react-redux';
 import styled from 'styled-components/native';
+import {useDispatch} from 'react-redux';
+import {useMySelector} from '../hooks';
+import {getPostsInfo} from '../reducers/post';
 import {getUsersInfo} from '../reducers/user';
-
-const Container = styled.View`
-  flex: 1;
-  padding: 20px;
-`;
+import Container from '../components/shared/Container';
+import {FlatList} from 'react-native';
+import PostCard from '../components/PostCard';
 
 const Text = styled.Text``;
 
@@ -15,18 +14,20 @@ const Button = styled.TouchableOpacity`
   margin-bottom: 20px;
 `;
 
-const ScrollView = styled.ScrollView``;
-
 export default ({navigation}) => {
   const dispatch = useDispatch();
-  const userLoading = useSelector(
-    state => state.user.userLoading,
-    shallowEqual,
-  );
-  const usersInfo = useSelector(state => state.user.usersInfo, shallowEqual);
+  const [userLoading, postLoading] = useMySelector(state => [
+    state.user.userLoading,
+    state.post.postLoading,
+  ]);
+  const [usersInfo, postsInfo] = useMySelector(state => [
+    state.user.usersInfo,
+    state.post.postsInfo,
+  ]);
 
   useEffect(() => {
     dispatch(getUsersInfo());
+    dispatch(getPostsInfo({page: 1}));
   }, []);
 
   return (
@@ -34,14 +35,25 @@ export default ({navigation}) => {
       <Button onPress={() => navigation.navigate('Second')}>
         <Text>go to 2nd screen</Text>
       </Button>
-      {userLoading ? (
+      {userLoading || postLoading ? (
         <Text>Loading ... </Text>
       ) : (
-        <ScrollView>
-          {usersInfo?.map((user, index) => (
-            <Text key={index}>{user?.username}</Text>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={postsInfo}
+          keyExtractor={({item}) => item?.id}
+          renderItem={({item}) => (
+            <PostCard
+              title={item?.title}
+              body={item?.body}
+              userId={item?.userId}
+              id={item?.id}
+            />
+          )}
+          // ListEmptyComponent={}
+          // ListFooterComponent={}
+          // onEndReached={}
+          // onEndReachedThreshold={}
+        />
       )}
     </Container>
   );

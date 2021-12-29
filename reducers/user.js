@@ -1,16 +1,15 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {getUsersApi} from '../api';
 
 const name = 'users';
-const userAddress = 'https://jsonplaceholder.typicode.com/users';
-
 const initialState = {userLoading: false, usersInfo: []};
 
 export const getUsersInfo = createAsyncThunk(
   `${name}/getUsersInfo`,
   async (_, thunkAPI) => {
     try {
-      const res = await (await fetch(userAddress)).json();
-      return res;
+      const {data} = await getUsersApi();
+      return data;
     } catch (err) {
       console.log('users api err', err);
       return thunkAPI.rejectWithValue(err);
