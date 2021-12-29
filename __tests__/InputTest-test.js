@@ -4,7 +4,7 @@
 
 import 'react-native';
 import React from 'react';
-import InputTest from '../InputTest';
+import InputTest from '../testingCode/InputTest';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 
 // Note: test renderer must be required after react-native.

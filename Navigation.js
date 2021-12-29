@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 export default () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Splash" component={First} />
+      <Stack.Screen name="First" component={First} />
       <Stack.Screen name="Second" component={Second} />
     </Stack.Navigator>
   );
