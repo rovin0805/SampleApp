@@ -9,5 +9,7 @@ const api = axios.create({
 
 export const getUsersApi = () => api.get('users');
 
-export const getPostsApi = (page = 1, limit = 10) =>
+export const getPostsApi = ({page = 1, limit = 10}) =>
   api.get(`posts?_page=${page}&_limit=${limit}`);
+
+export const uploadPostApi = req => api.post('posts', JSON.stringify(req));

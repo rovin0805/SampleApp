@@ -1,7 +1,7 @@
 import {DefaultTheme} from 'styled-components';
 
 const colors = {
-  bgColor: '#F2FAF4',
+  bgColor: 'white',
   textColor: '#291E5F',
   cardColor: '#f7f1e3',
   btnColor: '#291E5F',
