@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {useForm, Controller} from 'react-hook-form';
 import Container from '../components/shared/Container';
-import {ScrollView} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {uploadPost} from '../reducers/post';
 import {useMySelector} from '../hooks';
@@ -64,15 +64,21 @@ export default ({navigation}) => {
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const req = {
       title: getValues('title'),
       body: getValues('body'),
       userId: 999,
     };
-    dispatch(uploadPost({req}));
-    if (!uploadLoading) {
-      navigation.goBack();
+    try {
+      const {status} = await dispatch(uploadPost({req})).unwrap();
+      if (status === 201) {
+        navigation.goBack();
+      } else {
+        throw '다시 시도해주세요.';
+      }
+    } catch (err) {
+      Alert.alert(err);
     }
   };
 

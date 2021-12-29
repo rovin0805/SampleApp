@@ -26,8 +26,8 @@ export const uploadPost = createAsyncThunk(
   `${name}/uploadPost`,
   async ({req}, thunkAPI) => {
     try {
-      const {data} = await uploadPostApi(req);
-      return data;
+      const res = await uploadPostApi(req);
+      return res;
     } catch (err) {
       console.log('upload post api err', err);
       return thunkAPI.rejectWithValue(err);
@@ -56,7 +56,7 @@ const slice = createSlice({
     },
     [uploadPost.fulfilled]: (state, {payload}) => {
       state.uploadLoading = false;
-      state.postsInfo = [payload, ...state.postsInfo];
+      state.postsInfo = [payload.data, ...state.postsInfo];
     },
     [uploadPost.rejected]: (state, {error}) => {
       state.uploadLoading = false;
